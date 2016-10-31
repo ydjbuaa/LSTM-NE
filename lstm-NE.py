@@ -49,12 +49,17 @@ def build_model(options):
         params[kk] = pp
 
     xn_proj = e2n_lstm.output(x_emb)
+    xn_proj = xn_proj[1:]
 
     n2e_lstm = LSTM(options['dim'], prefix='n2e_lstm')
     for kk, pp in n2e_lstm.params.items():
         params[kk] = pp
 
     xe_proj = n2e_lstm.output(xn_proj)
+    xe_proj = xe_proj[1:]
+
+    ne_err = ((xn_proj - y_emb) ** 2).sum()
+    ee_err = ((xe_proj- x_emb[1:-1]) **2).sum()
 
 
 
