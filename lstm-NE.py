@@ -133,9 +133,9 @@ def prepare_data(n_seqs, e_seqs, maxlen=None):
     y = numpy.zeros((maxlen, n_samples)).astype('int64')
 
     for idx, s in enumerate(n_seqs):
-        x[:lengths[idx], idx] = s
+        x[:lengths[idx]-2, idx] = s[1:-1]
     for idx, e in enumerate(e_seqs):
-        x[:lengths[idx]-1, idx] = e
+        y[:lengths[idx]-1, idx] = e
 
     return x, y
 
@@ -183,7 +183,7 @@ def train(
                 y = [node_corpus[t] for t in train_index]
                 x = [edge_corpus[t] for t in train_index]
 
-                x, y = prepare_data(x, y)
+                y, x = prepare_data(y, x)
                 # Get the data in numpy.ndarray format
                 # This swap the axis!
                 # Return something of shape (minibatch maxlen, n samples)
